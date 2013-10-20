@@ -18,6 +18,7 @@ use Doctrine\Common\Util\ClassUtils;
 use Doctrine\Bundle\DoctrineBundle\Command\CreateDatabaseDoctrineCommand;
 use Doctrine\Bundle\DoctrineBundle\Command\DropDatabaseDoctrineCommand;
 use Doctrine\Bundle\DoctrineBundle\Command\Proxy\RunSqlDoctrineCommand;
+use Doctrine\Bundle\DoctrineBundle\DependencyInjection\Compiler\EntityListenerPass;
 use Symfony\Component\Console\Application;
 use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -48,7 +49,9 @@ class DoctrineBundle extends Bundle
         if ($container->hasExtension('security')) {
             $container->getExtension('security')->addUserProviderFactory(new EntityFactory('entity', 'doctrine.orm.security.user.provider'));
         }
+
         $container->addCompilerPass(new DoctrineValidationPass('orm'));
+        $container->addCompilerPass(new EntityListenerPass());
     }
 
     /**
